@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BuildInfoService } from './buildInfoService';
 
+
 @Component({
   selector: 'my-app',
   templateUrl: 'view/main.html'
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit {
   }
 
   loadData(event) {
-    this.buildService.getBuildInfo().subscribe(data => console.log(JSON.stringify(data)));
+    this.buildService.getBuildInfo().subscribe(data => console.log('build data: ' + JSON.stringify(data)));
 
   }
 

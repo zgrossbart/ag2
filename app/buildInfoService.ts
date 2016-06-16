@@ -7,15 +7,33 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class BuildInfoService {
   constructor (private http: Http) {}
-  private buildInfoUrl = './build-info.json';  // URL to web API
-  getBuildInfo(): Observable<BuildInfo> {
+  private buildInfoUrl = './build-info.jso';  // URL to web API
+  getBuildInfo() {
     console.log('getting build info from: ' + this.buildInfoUrl);
-    var r = this.http.get(this.buildInfoUrl)
+    var r = /*this.http.get(this.buildInfoUrl)
                     .map(res => res.json())
-                    .catch(this.handleError);
+                    .catch(this.handleError);*/
+  this.http
+  .get(this.buildInfoUrl).catch((err, retry) => {
+    return this.showLogin()
+      .flatMap(v => v ? retry : Observable.throw(err));
+  })
+  /*.catch((err, retry) => Observable
+    .timer(10000, -1)
+    .flatMap(_ => retry));*/
+    
     console.log('done getting build info');
     return r;
   }
+
+  showLogin() : Observable<{}> {
+      console.log('showLogin...');
+      return this.http.get(this.buildInfoUrl + 'n')
+                    .map(res => res.json())
+                    .catch(this.handleError);
+
+  }
+
   private extractData(res: Response) {
     console.log('res.json(): ' + res.json());
     let body = res.json();
@@ -28,6 +46,9 @@ export class BuildInfoService {
     let errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg); // log to console instead
-    return Observable.throw(errMsg);
+    return this.http.get(this.buildInfoUrl + 'n')
+                    .map(res => res.json())
+                    .catch(this.handleError);
+    //return Observable.create(new Observable<BuildInfo>());
   }
 }
