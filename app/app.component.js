@@ -19,7 +19,7 @@ var AppComponent = (function () {
         //this.buildService.getBuildInfo();
     };
     AppComponent.prototype.loadData = function (event) {
-        console.log('build info: ' + JSON.stringify(this.buildService.getBuildInfo()));
+        this.buildService.getBuildInfo().subscribe(function (data) { return console.log(JSON.stringify(data)); });
     };
     AppComponent.prototype.handleMyClick = function (event) {
         this.count++;

@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   }
 
   loadData(event) {
-    console.log('build info: ' + JSON.stringify(this.buildService.getBuildInfo()));
+    this.buildService.getBuildInfo().subscribe(data => console.log(JSON.stringify(data)));
 
   }
 
